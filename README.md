@@ -26,7 +26,7 @@ A comprehensive REST API for an e-commerce platform built with Node.js, TypeScri
 ### 1. Clone the repository
 
 ```bash
-git clone <https://github.com/Munirmohammed/Ecommerce.git>
+git clone https://github.com/Munirmohammed/Ecommerce.git
 cd ecommerce
 ```
 
@@ -158,9 +158,11 @@ src/
 - `npm run prisma:migrate` - Run database migrations
 - `npm run prisma:generate` - Generate Prisma client
 - `npm run prisma:studio` - Open Prisma Studio
+- `npm run prisma:seed` - Seed database with test data
 - `npm run lint` - Run ESLint
 - `npm run format` - Format code with Prettier
-- `npm test` - Run tests
+- `npm test` - Run tests with coverage
+- `npm run test:watch` - Run tests in watch mode
 
 ## Technology Choices
 

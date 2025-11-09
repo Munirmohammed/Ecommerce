@@ -6,5 +6,6 @@ dist
 coverage
 .vscode
 .idea
+*.tsbuildinfo
 
 /src/generated/prisma
