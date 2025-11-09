@@ -64,7 +64,19 @@ Generate Prisma client:
 npm run prisma:generate
 ```
 
-### 5. Run the application
+### 5. Seed the database (optional)
+
+Add sample data including admin and test users:
+
+```bash
+npm run prisma:seed
+```
+
+Test credentials after seeding:
+- **Admin**: admin@ecommerce.com / Admin@123
+- **User**: user@ecommerce.com / User@123
+
+### 6. Run the application
 
 **Development mode:**
 ```bash
