@@ -28,9 +28,10 @@ describe('Order Endpoints', () => {
 
   describe('POST /orders', () => {
     it('should create order successfully', async () => {
+      const productId = '550e8400-e29b-41d4-a716-446655440000';
       const mockProducts = [
         {
-          id: 'product-1',
+          id: productId,
           name: 'Product 1',
           price: 99.99,
           stock: 10,
@@ -38,14 +39,14 @@ describe('Order Endpoints', () => {
       ];
 
       const mockOrder = {
-        id: 'order-1',
+        id: '550e8400-e29b-41d4-a716-446655440001',
         userId: 'user-id',
         totalPrice: 199.98,
         status: 'pending',
         orderItems: [
           {
-            id: 'item-1',
-            productId: 'product-1',
+            id: '550e8400-e29b-41d4-a716-446655440002',
+            productId: productId,
             quantity: 2,
             price: 99.99,
             product: mockProducts[0],
@@ -72,7 +73,7 @@ describe('Order Endpoints', () => {
         .set('Authorization', `Bearer ${userToken}`)
         .send([
           {
-            productId: 'product-1',
+            productId: productId,
             quantity: 2,
           },
         ]);
@@ -120,6 +121,8 @@ describe('Order Endpoints', () => {
     });
 
     it('should fail when product not found', async () => {
+      const productId = '550e8400-e29b-41d4-a716-446655440000';
+      
       (prisma.$transaction as jest.Mock).mockImplementation(async (callback) => {
         const tx = {
           product: {
@@ -134,7 +137,7 @@ describe('Order Endpoints', () => {
         .set('Authorization', `Bearer ${userToken}`)
         .send([
           {
-            productId: 'non-existent',
+            productId: productId,
             quantity: 1,
           },
         ]);
@@ -144,9 +147,10 @@ describe('Order Endpoints', () => {
     });
 
     it('should fail when insufficient stock', async () => {
+      const productId = '550e8400-e29b-41d4-a716-446655440000';
       const mockProducts = [
         {
-          id: 'product-1',
+          id: productId,
           name: 'Product 1',
           price: 99.99,
           stock: 1, // only 1 in stock
@@ -167,7 +171,7 @@ describe('Order Endpoints', () => {
         .set('Authorization', `Bearer ${userToken}`)
         .send([
           {
-            productId: 'product-1',
+            productId: productId,
             quantity: 5, // requesting more than available
           },
         ]);

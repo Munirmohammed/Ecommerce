@@ -83,8 +83,9 @@ describe('Product Endpoints', () => {
 
   describe('GET /products/:id', () => {
     it('should get product by id', async () => {
+      const productId = '550e8400-e29b-41d4-a716-446655440000';
       const mockProduct = {
-        id: '1',
+        id: productId,
         name: 'Product 1',
         description: 'Description 1',
         price: 99.99,
@@ -94,7 +95,7 @@ describe('Product Endpoints', () => {
 
       (prisma.product.findUnique as jest.Mock).mockResolvedValue(mockProduct);
 
-      const response = await request(app).get('/products/1');
+      const response = await request(app).get(`/products/${productId}`);
 
       expect(response.status).toBe(200);
       expect(response.body.success).toBe(true);
@@ -102,9 +103,10 @@ describe('Product Endpoints', () => {
     });
 
     it('should return 404 for non-existent product', async () => {
+      const productId = '550e8400-e29b-41d4-a716-446655440000';
       (prisma.product.findUnique as jest.Mock).mockResolvedValue(null);
 
-      const response = await request(app).get('/products/999');
+      const response = await request(app).get(`/products/${productId}`);
 
       expect(response.status).toBe(404);
       expect(response.body.success).toBe(false);
@@ -230,11 +232,12 @@ describe('Product Endpoints', () => {
 
   describe('DELETE /products/:id', () => {
     it('should delete product as admin', async () => {
-      (prisma.product.findUnique as jest.Mock).mockResolvedValue({ id: '1' });
-      (prisma.product.delete as jest.Mock).mockResolvedValue({ id: '1' });
+      const productId = '550e8400-e29b-41d4-a716-446655440000';
+      (prisma.product.findUnique as jest.Mock).mockResolvedValue({ id: productId });
+      (prisma.product.delete as jest.Mock).mockResolvedValue({ id: productId });
 
       const response = await request(app)
-        .delete('/products/1')
+        .delete(`/products/${productId}`)
         .set('Authorization', `Bearer ${adminToken}`);
 
       expect(response.status).toBe(200);
@@ -242,10 +245,11 @@ describe('Product Endpoints', () => {
     });
 
     it('should return 404 for non-existent product', async () => {
+      const productId = '550e8400-e29b-41d4-a716-446655440000';
       (prisma.product.findUnique as jest.Mock).mockResolvedValue(null);
 
       const response = await request(app)
-        .delete('/products/999')
+        .delete(`/products/${productId}`)
         .set('Authorization', `Bearer ${adminToken}`);
 
       expect(response.status).toBe(404);
@@ -253,8 +257,9 @@ describe('Product Endpoints', () => {
     });
 
     it('should fail as regular user', async () => {
+      const productId = '550e8400-e29b-41d4-a716-446655440000';
       const response = await request(app)
-        .delete('/products/1')
+        .delete(`/products/${productId}`)
         .set('Authorization', `Bearer ${userToken}`);
 
       expect(response.status).toBe(403);

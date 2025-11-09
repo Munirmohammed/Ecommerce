@@ -38,4 +38,9 @@ export class OrderController {
       }
 
       const orders = await orderService.getUserOrders(req.user.userId);
-      sendSuccess(res, 'Orders retrieved successfully', orders
+      sendSuccess(res, 'Orders retrieved successfully', orders, 200);
+    } catch (error) {
+      next(error);
+    }
+  }
+}
