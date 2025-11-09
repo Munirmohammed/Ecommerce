@@ -89,18 +89,40 @@ npm run build
 npm start
 ```
 
-### Docker Setup
+### Docker Setup (Recommended for Testing)
 
-Run the entire stack with Docker Compose:
+Run the entire stack with Docker Compose (includes automatic migrations and seeding):
 
 ```bash
-docker-compose up -d
+docker-compose up --build
 ```
 
-This will start:
-- PostgreSQL database on port 5432
-- Redis cache on port 6379
-- API server on port 3000
+This will:
+1. Build the application image
+2. Start PostgreSQL database on port 5432
+3. Start Redis cache on port 6379
+4. Run database migrations automatically
+5. Seed the database with test data
+6. Start the API server on port 3000
+
+**Test credentials after Docker setup:**
+- **Admin**: admin@ecommerce.com / Admin@123
+- **User**: user@ecommerce.com / User@123
+
+**Access the API:**
+- API Base URL: http://localhost:3000/api
+- API Documentation: http://localhost:3000/api-docs
+- Health Check: http://localhost:3000/health
+
+**Stop the services:**
+```bash
+docker-compose down
+```
+
+**Stop and remove volumes (clean slate):**
+```bash
+docker-compose down -v
+```
 
 ## API Documentation
 

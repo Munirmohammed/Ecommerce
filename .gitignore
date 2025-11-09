@@ -1,11 +1,13 @@
 node_modules
 dist
 .env
+.env.docker
 *.log
 .DS_Store
 coverage
 .vscode
 .idea
 *.tsbuildinfo
+.env.local
 
 /src/generated/prisma
