@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { AuthRequest } from '@/types';
 import { ProductService } from '@/services/product.service';
 import { sendSuccess, sendError, sendPaginated } from '@/utils/response';
+import { uploadImage } from '@/utils/cloudinary';
 
 const productService = new ProductService();
 
@@ -10,6 +11,29 @@ export class ProductController {
     try {
       const product = await productService.createProduct(req.body);
       sendSuccess(res, 'Product created successfully', product, 201);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async uploadProductImage(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      if (!req.file) {
+        sendError(res, 'No image file provided', ['Image is required'], 400);
+        return;
+      }
+
+      const result = await uploadImage(req.file);
+
+      sendSuccess(
+        res,
+        'Image uploaded successfully',
+        {
+          imageUrl: result.secure_url,
+          publicId: result.public_id,
+        },
+        200
+      );
     } catch (error) {
       next(error);
     }

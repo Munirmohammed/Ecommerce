@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { ProductController } from '@/controllers/product.controller';
 import { authenticate, authorize } from '@/middleware/auth';
 import { validate } from '@/middleware/validate';
+import { upload } from '@/middleware/upload';
 import {
   createProductSchema,
   updateProductSchema,
@@ -24,6 +25,14 @@ router.post(
   authorize('admin'),
   validate(createProductSchema),
   productController.createProduct
+);
+
+router.post(
+  '/upload',
+  authenticate,
+  authorize('admin'),
+  upload.single('image'),
+  productController.uploadProductImage
 );
 
 router.put(
