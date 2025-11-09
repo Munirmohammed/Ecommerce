@@ -3,9 +3,8 @@ import { ProductController } from '@/controllers/product.controller';
 import { authenticate, authorize } from '@/middleware/auth';
 import { validate } from '@/middleware/validate';
 import { upload } from '@/middleware/upload';
+import { validateCreateProduct, validateUpdateProduct } from '@/middleware/validateProduct';
 import {
-  createProductSchema,
-  updateProductSchema,
   getProductSchema,
   deleteProductSchema,
   getProductsSchema,
@@ -77,7 +76,7 @@ router.get('/:id', validate(getProductSchema), productController.getProductById)
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             required:
@@ -97,8 +96,9 @@ router.get('/:id', validate(getProductSchema), productController.getProductById)
  *                 type: integer
  *               category:
  *                 type: string
- *               imageUrl:
+ *               image:
  *                 type: string
+ *                 format: binary
  *     responses:
  *       201:
  *         description: Product created successfully
@@ -111,42 +111,9 @@ router.post(
   '/',
   authenticate,
   authorize('admin'),
-  validate(createProductSchema),
-  productController.createProduct
-);
-
-/**
- * @swagger
- * /products/upload:
- *   post:
- *     tags: [Products]
- *     summary: Upload product image (Admin only)
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         multipart/form-data:
- *           schema:
- *             type: object
- *             properties:
- *               image:
- *                 type: string
- *                 format: binary
- *     responses:
- *       200:
- *         description: Image uploaded successfully
- *       400:
- *         description: Invalid file
- *       401:
- *         description: Unauthorized
- */
-router.post(
-  '/upload',
-  authenticate,
-  authorize('admin'),
   upload.single('image'),
-  productController.uploadProductImage
+  validateCreateProduct,
+  productController.createProduct
 );
 
 /**
@@ -167,7 +134,7 @@ router.post(
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
@@ -181,8 +148,9 @@ router.post(
  *                 type: integer
  *               category:
  *                 type: string
- *               imageUrl:
+ *               image:
  *                 type: string
+ *                 format: binary
  *     responses:
  *       200:
  *         description: Product updated successfully
@@ -193,7 +161,8 @@ router.put(
   '/:id',
   authenticate,
   authorize('admin'),
-  validate(updateProductSchema),
+  upload.single('image'),
+  validateUpdateProduct,
   productController.updateProduct
 );
 

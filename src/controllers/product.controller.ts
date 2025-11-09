@@ -9,31 +9,26 @@ const productService = new ProductService();
 export class ProductController {
   async createProduct(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
-      const product = await productService.createProduct(req.body);
-      sendSuccess(res, 'Product created successfully', product, 201);
-    } catch (error) {
-      next(error);
-    }
-  }
+      let imageUrl: string | undefined;
 
-  async uploadProductImage(req: Request, res: Response, next: NextFunction): Promise<void> {
-    try {
-      if (!req.file) {
-        sendError(res, 'No image file provided', ['Image is required'], 400);
-        return;
+      // if image file is uploaded, upload to cloudinary first
+      if (req.file) {
+        const result = await uploadImage(req.file);
+        imageUrl = result.secure_url;
       }
 
-      const result = await uploadImage(req.file);
+      // parse form data - multer puts text fields in req.body
+      const productData = {
+        name: req.body.name,
+        description: req.body.description,
+        price: parseFloat(req.body.price),
+        stock: parseInt(req.body.stock, 10),
+        category: req.body.category,
+        imageUrl,
+      };
 
-      sendSuccess(
-        res,
-        'Image uploaded successfully',
-        {
-          imageUrl: result.secure_url,
-          publicId: result.public_id,
-        },
-        200
-      );
+      const product = await productService.createProduct(productData);
+      sendSuccess(res, 'Product created successfully', product, 201);
     } catch (error) {
       next(error);
     }
@@ -41,7 +36,32 @@ export class ProductController {
 
   async updateProduct(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const product = await productService.updateProduct(req.params.id, req.body);
+      let imageUrl: string | undefined;
+
+      // if new image file is uploaded, upload to cloudinary
+      if (req.file) {
+        const result = await uploadImage(req.file);
+        imageUrl = result.secure_url;
+      }
+
+      // parse form data
+      const productData: {
+        name?: string;
+        description?: string;
+        price?: number;
+        stock?: number;
+        category?: string;
+        imageUrl?: string;
+      } = {};
+
+      if (req.body.name) productData.name = req.body.name;
+      if (req.body.description) productData.description = req.body.description;
+      if (req.body.price) productData.price = parseFloat(req.body.price);
+      if (req.body.stock) productData.stock = parseInt(req.body.stock, 10);
+      if (req.body.category) productData.category = req.body.category;
+      if (imageUrl) productData.imageUrl = imageUrl;
+
+      const product = await productService.updateProduct(req.params.id, productData);
       sendSuccess(res, 'Product updated successfully', product, 200);
     } catch (error) {
       const err = error as Error;
