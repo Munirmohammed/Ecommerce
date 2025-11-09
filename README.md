@@ -198,6 +198,10 @@ Products support image uploads in two ways:
 
 The API automatically processes and optimizes uploaded images using Cloudinary.
 
+### Testing with Postman
+
+As an alternative to Swagger, you can test the APIs using the provided Postman collection. Simply import the `Ecommerce_API_Postman_Collection.json` file into Postman to get started with pre-configured requests for all endpoints, including authentication, product management, and order processing.
+
 ## Project Structure
 
 ```
