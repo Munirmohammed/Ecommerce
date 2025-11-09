@@ -15,14 +15,17 @@ export class ProductController {
       if (req.file) {
         const result = await uploadImage(req.file);
         imageUrl = result.secure_url;
+      } else if (req.body.imageUrl) {
+        // if imageUrl is provided in JSON, use it
+        imageUrl = req.body.imageUrl;
       }
 
-      // parse form data - multer puts text fields in req.body
+      // handle both JSON and form data
       const productData = {
         name: req.body.name,
         description: req.body.description,
-        price: parseFloat(req.body.price),
-        stock: parseInt(req.body.stock, 10),
+        price: typeof req.body.price === 'string' ? parseFloat(req.body.price) : req.body.price,
+        stock: typeof req.body.stock === 'string' ? parseInt(req.body.stock, 10) : req.body.stock,
         category: req.body.category,
         imageUrl,
       };
@@ -42,9 +45,12 @@ export class ProductController {
       if (req.file) {
         const result = await uploadImage(req.file);
         imageUrl = result.secure_url;
+      } else if (req.body.imageUrl) {
+        // if imageUrl is provided in JSON, use it
+        imageUrl = req.body.imageUrl;
       }
 
-      // parse form data
+      // handle both JSON and form data
       const productData: {
         name?: string;
         description?: string;
@@ -56,8 +62,14 @@ export class ProductController {
 
       if (req.body.name) productData.name = req.body.name;
       if (req.body.description) productData.description = req.body.description;
-      if (req.body.price) productData.price = parseFloat(req.body.price);
-      if (req.body.stock) productData.stock = parseInt(req.body.stock, 10);
+      if (req.body.price) {
+        productData.price =
+          typeof req.body.price === 'string' ? parseFloat(req.body.price) : req.body.price;
+      }
+      if (req.body.stock) {
+        productData.stock =
+          typeof req.body.stock === 'string' ? parseInt(req.body.stock, 10) : req.body.stock;
+      }
       if (req.body.category) productData.category = req.body.category;
       if (imageUrl) productData.imageUrl = imageUrl;
 

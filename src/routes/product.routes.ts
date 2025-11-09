@@ -2,8 +2,11 @@ import { Router } from 'express';
 import { ProductController } from '@/controllers/product.controller';
 import { authenticate, authorize } from '@/middleware/auth';
 import { validate } from '@/middleware/validate';
-import { upload } from '@/middleware/upload';
-import { validateCreateProduct, validateUpdateProduct } from '@/middleware/validateProduct';
+import { optionalImageUpload } from '@/middleware/optionalUpload';
+import {
+  validateCreateProductFlexible,
+  validateUpdateProductFlexible,
+} from '@/middleware/validateProductFlexible';
 import {
   getProductSchema,
   deleteProductSchema,
@@ -71,11 +74,34 @@ router.get('/:id', validate(getProductSchema), productController.getProductById)
  *   post:
  *     tags: [Products]
  *     summary: Create a new product (Admin only)
+ *     description: Accepts both JSON (with imageUrl) and multipart/form-data (with image file)
  *     security:
  *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - description
+ *               - price
+ *               - stock
+ *               - category
+ *             properties:
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               price:
+ *                 type: number
+ *               stock:
+ *                 type: integer
+ *               category:
+ *                 type: string
+ *               imageUrl:
+ *                 type: string
  *         multipart/form-data:
  *           schema:
  *             type: object
@@ -111,8 +137,8 @@ router.post(
   '/',
   authenticate,
   authorize('admin'),
-  upload.single('image'),
-  validateCreateProduct,
+  optionalImageUpload,
+  validateCreateProductFlexible,
   productController.createProduct
 );
 
@@ -122,6 +148,7 @@ router.post(
  *   put:
  *     tags: [Products]
  *     summary: Update product (Admin only)
+ *     description: Accepts both JSON (with imageUrl) and multipart/form-data (with image file)
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -134,6 +161,22 @@ router.post(
  *     requestBody:
  *       required: true
  *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               price:
+ *                 type: number
+ *               stock:
+ *                 type: integer
+ *               category:
+ *                 type: string
+ *               imageUrl:
+ *                 type: string
  *         multipart/form-data:
  *           schema:
  *             type: object
@@ -161,8 +204,8 @@ router.put(
   '/:id',
   authenticate,
   authorize('admin'),
-  upload.single('image'),
-  validateUpdateProduct,
+  optionalImageUpload,
+  validateUpdateProductFlexible,
   productController.updateProduct
 );
 
