@@ -34,7 +34,7 @@ async function main() {
   });
   console.log('Regular user created:', user.email);
 
-  // create sample products
+  // create sample products with images
   const products = [
     {
       name: 'Wireless Headphones',
@@ -42,6 +42,7 @@ async function main() {
       price: 99.99,
       stock: 50,
       category: 'Electronics',
+      imageUrl: 'https://res.cloudinary.com/dgg3qfcmw/image/upload/v1666796915/cld-sample.jpg',
     },
     {
       name: 'Smart Watch',
@@ -49,6 +50,7 @@ async function main() {
       price: 199.99,
       stock: 30,
       category: 'Electronics',
+      imageUrl: 'https://res.cloudinary.com/dgg3qfcmw/image/upload/v1666796892/samples/ecommerce/analog-classic.jpg',
     },
     {
       name: 'Running Shoes',
@@ -56,6 +58,7 @@ async function main() {
       price: 79.99,
       stock: 100,
       category: 'Sports',
+      imageUrl: 'https://res.cloudinary.com/dgg3qfcmw/image/upload/v1666796917/cld-sample-5.jpg',
     },
     {
       name: 'Coffee Maker',
@@ -63,6 +66,7 @@ async function main() {
       price: 49.99,
       stock: 25,
       category: 'Home',
+      imageUrl: 'https://res.cloudinary.com/dgg3qfcmw/image/upload/v1666796916/cld-sample-3.jpg',
     },
     {
       name: 'Yoga Mat',
@@ -70,6 +74,7 @@ async function main() {
       price: 29.99,
       stock: 75,
       category: 'Sports',
+      imageUrl: 'https://res.cloudinary.com/dgg3qfcmw/image/upload/v1666796901/samples/ecommerce/car-interior-design.jpg',
     },
   ];
 
