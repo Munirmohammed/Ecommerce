@@ -112,7 +112,10 @@ const options: swaggerJsdoc.Options = {
       { name: 'Orders', description: 'Order management endpoints' },
     ],
   },
-  apis: ['./src/routes/*.ts'],
+  // Use different paths for development and production environments
+  apis: process.env.NODE_ENV === 'production' 
+    ? ['./dist/routes/*.js'] 
+    : ['./src/routes/*.ts'],
 };
 
 export const swaggerSpec = swaggerJsdoc(options);
