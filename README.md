@@ -2,6 +2,32 @@
 
 A comprehensive REST API for an e-commerce platform built with Node.js, TypeScript, Express, and PostgreSQL.
 
+[![TypeScript](https://img.shields.io/badge/TypeScript-5+-blue.svg)](https://www.typescriptlang.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-20+-green.svg)](https://nodejs.org/)
+[![Express](https://img.shields.io/badge/Express-4.x-lightgrey.svg)](https://expressjs.com/)
+[![Prisma](https://img.shields.io/badge/Prisma-ORM-blueviolet.svg)](https://prisma.io/)
+[![Docker](https://img.shields.io/badge/Docker-Compose-blue.svg)](https://docker.com/)
+
+## Quick Start
+
+The fastest way to get started is with Docker:
+
+```bash
+# Clone the repository
+git clone https://github.com/Munirmohammed/Ecommerce.git
+cd ecommerce
+
+# Start the entire stack (database, cache, and API)
+docker-compose up --build
+
+# The API will be available at http://localhost:3000
+# API Documentation: http://localhost:3000/api-docs
+```
+
+Test credentials:
+- **Admin**: admin@ecommerce.com / Admin@123
+- **User**: user@ecommerce.com / User@123
+
 ## Tech Stack
 
 - **Runtime**: Node.js 20+
@@ -41,7 +67,11 @@ npm install
 Copy the example environment file and update with your values:
 
 ```bash
+# On Linux/Mac
 cp .env.example .env
+
+# On Windows
+copy .env.example .env
 ```
 
 Required environment variables:
@@ -49,6 +79,8 @@ Required environment variables:
 - `JWT_SECRET`: Secret key for JWT signing
 - `REDIS_URL`: Redis connection string (optional)
 - `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`: For image uploads (optional)
+
+> **Note**: For Cloudinary integration, you need to create a free account at [Cloudinary](https://cloudinary.com/) and obtain your API credentials.
 
 ### 4. Database Setup
 
@@ -158,6 +190,14 @@ http://localhost:3000/api
 }
 ```
 
+### Product Image Upload
+
+Products support image uploads in two ways:
+1. **Multipart Form-Data**: Upload an image file directly when creating/updating a product
+2. **Image URL**: Provide an `imageUrl` field with a public image URL
+
+The API automatically processes and optimizes uploaded images using Cloudinary.
+
 ## Project Structure
 
 ```
@@ -197,6 +237,10 @@ src/
 **Redis**: Fast in-memory caching for frequently accessed data like product listings.
 
 **Docker**: Ensures consistent development and deployment environments.
+
+**Cloudinary**: Cloud-based image management with automatic optimization and transformation.
+
+**Swagger**: Interactive API documentation for easy integration and testing.
 
 ## License
 
